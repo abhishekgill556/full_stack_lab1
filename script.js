@@ -1,30 +1,45 @@
-// array of terms to be displayed on the page
-const terms = ["SEO", "Abstraction", "IDE", "OOP", "Runtime"];
+// Run code after page is fully loaded
+window.onload = function () {
+  const listContainer = document.getElementById("employee-list");
 
-const populateTermList = (listNode, terms) => {
-    // iterate over term array
-    terms.forEach(term => {
-        // create new DOM node
-        const newLiNode = document.createElement("li");
+  // Get employee data
+  fetch("./src/assets/employees.json")
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      const departments = {};
 
-        // modify HTML in new DOM node to include iterated term value
-        newLiNode.innerHTML = `<a href="#">${term}</a>`;
+      // Group employees by department
+      data.forEach(function (emp) {
+        if (!departments[emp.department]) {
+          departments[emp.department] = [];
+        }
+        departments[emp.department].push(emp.name);
+      });
 
-        // append new LI node as child element of list argument node
-        listNode.appendChild(newLiNode);
+      // Create HTML for each department
+      for (let dept in departments) {
+        const section = document.createElement("div");
+
+        const heading = document.createElement("h4");
+        heading.textContent = dept;
+        section.appendChild(heading);
+
+        const ul = document.createElement("ul");
+
+        departments[dept].forEach(function (name) {
+          const li = document.createElement("li");
+          li.textContent = name;
+          ul.appendChild(li);
+        });
+
+        section.appendChild(ul);
+        listContainer.appendChild(section);
+      }
     });
-}
 
-
-/** 
-// add event listener to the "document" node
-// callback function invokes when event "fires" on element that listener was
-appended to, in this case, when the DOM has loaded fully
-*/ 
-document.addEventListener("DOMContentLoaded", () => {
-    // store the DOM node referencing an element with class "top-terms__list"
-    const termListNode = document.querySelector(".top-terms__list");
-
-    // invoke function passing in DOM node and terms array
-    populateTermList(termListNode, terms);
-});
+  // Set footer year
+  const yearSpan = document.getElementById("year");
+  yearSpan.textContent = new Date().getFullYear();
+};
