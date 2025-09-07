@@ -1,7 +1,16 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,        // <-- allows importing employees.json
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",               // <-- enables JSX parsing
+    "types": ["vite/client"]          // <-- Vite types
+  },
+  "include": ["src"]
 }
